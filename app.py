@@ -1,14 +1,53 @@
 import streamlit as st
 
+# Include the Google Fonts link at the top of your script
+st.markdown("""
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Kanit', Tahoma, sans-serif; /* Use Kanit font with fallback to Tahoma and sans-serif */
+                margin: 20px;
+                line-height: 1.6; /* Adjust line height for better readability */
+            }
+            .section {
+                margin-bottom: 20px; /* Add space between sections */
+            }
+            .consent-button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    """, unsafe_allow_html=True)
+
+# Your existing Streamlit code follows...
+
 st.set_page_config(page_title="Medical Information and Consent")
 
-# Set up a session state variable for language
+# Set up a session state variable for language and consent
 if 'language' not in st.session_state:
     st.session_state['language'] = 'en'
+
+if 'consent_accepted' not in st.session_state:
+    st.session_state['consent_accepted'] = False
 
 # Language switcher function
 def switch_language(language):
     st.session_state['language'] = language
+
+# Function to toggle consent acceptance
+def toggle_consent():
+    st.session_state['consent_accepted'] = not st.session_state['consent_accepted']
 
 # Language Switch Buttons
 st.sidebar.title("Language")
@@ -46,7 +85,8 @@ if st.session_state['language'] == 'en':
             <li><strong>Accuracy of Information:</strong> The information derived from the analysis is only a preliminary prediction and cannot replace a diagnosis by a healthcare professional.</li>
             <li><strong>Data Protection:</strong> Your information will not be used for identification or shared with third parties without your consent.</li>
         </ul>
-        <button class="consent-button" onclick="acceptConsent()">I accept and understand the above terms</button>
+        <input type="checkbox" id="consentCheckbox" onchange="toggleConsent(this)">
+        <label for="consentCheckbox">I accept and understand the above terms</label>
     </div>
     """, unsafe_allow_html=True)
 
@@ -81,17 +121,24 @@ elif st.session_state['language'] == 'th':
             <li><strong>ความถูกต้องของข้อมูล:</strong> ข้อมูลที่ได้จากการวิเคราะห์จะเป็นเพียงการคาดการณ์เบื้องต้นเท่านั้น และไม่สามารถทดแทนการวินิจฉัยโดยแพทย์ผู้เชี่ยวชาญได้</li>
             <li><strong>การคุ้มครองข้อมูลส่วนบุคคล:</strong> ข้อมูลของคุณจะไม่ถูกใช้เพื่อการระบุตัวตนหรือแบ่งปันกับบุคคลภายนอกโดยไม่ได้รับความยินยอมจากคุณ</li>
         </ul>
-        <button class="consent-button" onclick="acceptConsent()">ข้าพเจ้ายอมรับและเข้าใจข้อตกลงข้างต้น</button>
+        <input type="checkbox" id="consentCheckbox" onchange="toggleConsent(this)">
+        <label for="consentCheckbox">ข้าพเจ้ายอมรับและเข้าใจข้อตกลงข้างต้น</label>
     </div>
     """, unsafe_allow_html=True)
 
-# JavaScript for consent button to navigate to another page
+# JavaScript to toggle consent acceptance
 consent_script = """
 <script>
-    function acceptConsent() {
-        window.location.href = 'https://nnnnnnnatsu-cough.hf.space';
+    function toggleConsent(checkbox) {
+        var consentButton = document.getElementById('consentButton');
+        consentButton.disabled = !checkbox.checked;
     }
 </script>
 """
 
+# Display JavaScript
 st.markdown(consent_script, unsafe_allow_html=True)
+
+# Next button to go to the next page
+if st.session_state['consent_accepted']:
+    st.button('Next', key='consentButton', on_click=lambda: st.experimental_rerun())
