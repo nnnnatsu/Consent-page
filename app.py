@@ -1,20 +1,23 @@
 import streamlit as st
 
-# Include the Google Fonts link at the top of your script
+# Set page config first
+st.set_page_config(page_title="Medical Information and Consent")
+
+# Include the Google Fonts link and style within st.markdown() call
 st.markdown("""
     <head>
         <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
         <style>
             body {
-                font-family: 'Kanit', Tahoma, sans-serif; /* Use Kanit font with fallback to Tahoma and sans-serif */
+                font-family: 'Kanit', Tahoma, sans-serif;
                 margin: 20px;
-                line-height: 1.6; /* Adjust line height for better readability */
+                line-height: 1.6;
             }
             .section {
-                margin-bottom: 20px; /* Add space between sections */
+                margin-bottom: 20px;
             }
             .consent-button {
-                background-color: #4CAF50; /* Green */
+                background-color: #4CAF50;
                 border: none;
                 color: white;
                 padding: 10px 20px;
@@ -29,10 +32,6 @@ st.markdown("""
         </style>
     </head>
     """, unsafe_allow_html=True)
-
-# Your existing Streamlit code follows...
-
-st.set_page_config(page_title="Medical Information and Consent")
 
 # Set up a session state variable for language and consent
 if 'language' not in st.session_state:
@@ -113,12 +112,12 @@ elif st.session_state['language'] == 'th':
             <li>แอปพลิเคชั่นนี้เคารพและปฏิบัติตามหลักการคุ้มครองข้อมูลส่วนบุคคลตามกฎหมายที่บังคับใช้</li>
             <li>ข้อมูลทั้งหมดที่ใช้ในการวิเคราะห์จะถูกเก็บรักษาเป็นความลับและไม่ถูกเปิดเผยต่อบุคคลภายนอกโดยไม่ได้รับความยินยอมจากผู้ใช้</li>
         </ul>
-        <h2>ข้อตกลงยินยอม</h2>
-        <p>โดยการใช้แอปพลิเคชั่นนี้ คุณตกลงและยอมรับข้อกำหนดดังต่อไปนี้:</p>
+        <h2>ข้อตกลงการยินยอม</h2>
+        <p>โดยการใช้แอปพลิเคชั่นนี้ คุณยินยอมและเข้าใจข้อกำหนดดังต่อไปนี้:</p>
         <ul>
-            <li><strong>ความสมัครใจ:</strong> การใช้แอปพลิเคชั่นนี้เป็นไปโดยความสมัครใจของคุณ ไม่มีการบังคับใดๆ</li>
-            <li><strong>การใช้งานข้อมูล:</strong> แอปพลิเคชั่นจะใช้เสียงไอของคุณเพื่อการวิเคราะห์โรคโดยไม่บันทึกหรือเก็บข้อมูลใดๆ ข้อมูลทั้งหมดจะถูกลบอัตโนมัติหลังการวิเคราะห์เสร็จสิ้น</li>
-            <li><strong>ความถูกต้องของข้อมูล:</strong> ข้อมูลที่ได้จากการวิเคราะห์จะเป็นเพียงการคาดการณ์เบื้องต้นเท่านั้น และไม่สามารถทดแทนการวินิจฉัยโดยแพทย์ผู้เชี่ยวชาญได้</li>
+            <li><strong>ความสมัครใจ:</strong> การใช้แอปพลิเคชั่นนี้เป็นไปตามความสมัครใจของคุณ ไม่มีการบังคับใดๆ</li>
+            <li><strong>การใช้ข้อมูล:</strong> แอปพลิเคชั่นจะใช้เสียงไอของคุณเพื่อวิเคราะห์โรคโดยไม่บันทึกหรือเก็บข้อมูลใดๆ ข้อมูลทั้งหมดจะถูกลบอัตโนมัติหลังจากการวิเคราะห์เสร็จสิ้น</li>
+            <li><strong>ความถูกต้องของข้อมูล:</strong> ข้อมูลที่ได้จากการวิเคราะห์เป็นเพียงการคาดการณ์เบื้องต้นเท่านั้น และไม่สามารถทดแทนการวินิจฉัยโดยแพทย์ผู้เชี่ยวชาญได้</li>
             <li><strong>การคุ้มครองข้อมูลส่วนบุคคล:</strong> ข้อมูลของคุณจะไม่ถูกใช้เพื่อการระบุตัวตนหรือแบ่งปันกับบุคคลภายนอกโดยไม่ได้รับความยินยอมจากคุณ</li>
         </ul>
         <input type="checkbox" id="consentCheckbox" onchange="toggleConsent(this)">
