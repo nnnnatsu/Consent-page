@@ -1,52 +1,14 @@
 import streamlit as st
 
-# Set page config first
 st.set_page_config(page_title="Medical Information and Consent")
 
-# Include the Google Fonts link and style within st.markdown() call
-st.markdown("""
-    <head>
-        <link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
-        <style>
-            body {
-                font-family: 'Kanit', Tahoma, sans-serif;
-                margin: 20px;
-                line-height: 1.6;
-            }
-            .section {
-                margin-bottom: 20px;
-            }
-            .consent-button {
-                background-color: #4CAF50;
-                border: none;
-                color: white;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 4px;
-            }
-        </style>
-    </head>
-    """, unsafe_allow_html=True)
-
-# Set up a session state variable for language and consent
+# Set up a session state variable for language
 if 'language' not in st.session_state:
     st.session_state['language'] = 'en'
-
-if 'consent_accepted' not in st.session_state:
-    st.session_state['consent_accepted'] = False
 
 # Language switcher function
 def switch_language(language):
     st.session_state['language'] = language
-
-# Function to toggle consent acceptance
-def toggle_consent():
-    st.session_state['consent_accepted'] = not st.session_state['consent_accepted']
 
 # Language Switch Buttons
 st.sidebar.title("Language")
@@ -84,8 +46,7 @@ if st.session_state['language'] == 'en':
             <li><strong>Accuracy of Information:</strong> The information derived from the analysis is only a preliminary prediction and cannot replace a diagnosis by a healthcare professional.</li>
             <li><strong>Data Protection:</strong> Your information will not be used for identification or shared with third parties without your consent.</li>
         </ul>
-        <input type="checkbox" id="consentCheckbox" onchange="toggleConsent(this)">
-        <label for="consentCheckbox">I accept and understand the above terms</label>
+        <button class="consent-button" onclick="acceptConsent()">I accept and understand the above terms</button>
     </div>
     """, unsafe_allow_html=True)
 
@@ -112,32 +73,25 @@ elif st.session_state['language'] == 'th':
             <li>แอปพลิเคชั่นนี้เคารพและปฏิบัติตามหลักการคุ้มครองข้อมูลส่วนบุคคลตามกฎหมายที่บังคับใช้</li>
             <li>ข้อมูลทั้งหมดที่ใช้ในการวิเคราะห์จะถูกเก็บรักษาเป็นความลับและไม่ถูกเปิดเผยต่อบุคคลภายนอกโดยไม่ได้รับความยินยอมจากผู้ใช้</li>
         </ul>
-        <h2>ข้อตกลงการยินยอม</h2>
-        <p>โดยการใช้แอปพลิเคชั่นนี้ คุณยินยอมและเข้าใจข้อกำหนดดังต่อไปนี้:</p>
+        <h2>ข้อตกลงยินยอม</h2>
+        <p>โดยการใช้แอปพลิเคชั่นนี้ คุณตกลงและยอมรับข้อกำหนดดังต่อไปนี้:</p>
         <ul>
-            <li><strong>ความสมัครใจ:</strong> การใช้แอปพลิเคชั่นนี้เป็นไปตามความสมัครใจของคุณ ไม่มีการบังคับใดๆ</li>
-            <li><strong>การใช้ข้อมูล:</strong> แอปพลิเคชั่นจะใช้เสียงไอของคุณเพื่อวิเคราะห์โรคโดยไม่บันทึกหรือเก็บข้อมูลใดๆ ข้อมูลทั้งหมดจะถูกลบอัตโนมัติหลังจากการวิเคราะห์เสร็จสิ้น</li>
-            <li><strong>ความถูกต้องของข้อมูล:</strong> ข้อมูลที่ได้จากการวิเคราะห์เป็นเพียงการคาดการณ์เบื้องต้นเท่านั้น และไม่สามารถทดแทนการวินิจฉัยโดยแพทย์ผู้เชี่ยวชาญได้</li>
+            <li><strong>ความสมัครใจ:</strong> การใช้แอปพลิเคชั่นนี้เป็นไปโดยความสมัครใจของคุณ ไม่มีการบังคับใดๆ</li>
+            <li><strong>การใช้งานข้อมูล:</strong> แอปพลิเคชั่นจะใช้เสียงไอของคุณเพื่อการวิเคราะห์โรคโดยไม่บันทึกหรือเก็บข้อมูลใดๆ ข้อมูลทั้งหมดจะถูกลบอัตโนมัติหลังการวิเคราะห์เสร็จสิ้น</li>
+            <li><strong>ความถูกต้องของข้อมูล:</strong> ข้อมูลที่ได้จากการวิเคราะห์จะเป็นเพียงการคาดการณ์เบื้องต้นเท่านั้น และไม่สามารถทดแทนการวินิจฉัยโดยแพทย์ผู้เชี่ยวชาญได้</li>
             <li><strong>การคุ้มครองข้อมูลส่วนบุคคล:</strong> ข้อมูลของคุณจะไม่ถูกใช้เพื่อการระบุตัวตนหรือแบ่งปันกับบุคคลภายนอกโดยไม่ได้รับความยินยอมจากคุณ</li>
         </ul>
-        <input type="checkbox" id="consentCheckbox" onchange="toggleConsent(this)">
-        <label for="consentCheckbox">ข้าพเจ้ายอมรับและเข้าใจข้อตกลงข้างต้น</label>
+        <button class="consent-button" onclick="acceptConsent()">ข้าพเจ้ายอมรับและเข้าใจข้อตกลงข้างต้น</button>
     </div>
     """, unsafe_allow_html=True)
 
-# JavaScript to toggle consent acceptance
+# JavaScript for consent button to navigate to another page
 consent_script = """
 <script>
-    function toggleConsent(checkbox) {
-        var consentButton = document.getElementById('consentButton');
-        consentButton.disabled = !checkbox.checked;
+    function acceptConsent() {
+        window.location.href = 'https://nnnnnnnatsu-cough.hf.space';
     }
 </script>
 """
 
-# Display JavaScript
 st.markdown(consent_script, unsafe_allow_html=True)
-
-# Next button to go to the next page
-if st.session_state['consent_accepted']:
-    st.button('Next', key='consentButton', on_click=lambda: st.experimental_rerun())
